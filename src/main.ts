@@ -1,5 +1,15 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import installElementPlus from './plugins/element-plus'
+import './assets/css/global.css'
+import 'element-plus/lib/theme-chalk/display.css'
+import axios from './api/index'
 
-createApp(App).use(router).mount('#app')
+const app = createApp(App)
+
+// 全局挂载api
+app.config.globalProperties.$http = axios
+
+installElementPlus(app)
+app.use(router).mount('#app')
