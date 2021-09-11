@@ -1,7 +1,9 @@
-import { ElPopconfirm, ElCheckbox, ElLoading, ElTabs, ElTabPane, ElDialog, ElTooltip, ElCol, ElRow, ElCard, ElScrollbar, ElButton, ElInput, ElCascader, ElTag } from 'element-plus'
+import { ElPopconfirm, ElCheckbox, ElTable, ElTableColumn, ElLoading, ElTabs, ElTabPane, ElDialog, ElTooltip, ElCol, ElRow, ElCard, ElScrollbar, ElButton, ElInput, ElCascader, ElTag } from 'element-plus'
 
 export default (app:any):void => {
+  app.use(ElTableColumn)
   app.use(ElButton)
+  app.use(ElTable)
   app.use(ElLoading)
   app.use(ElCheckbox)
   app.use(ElTabs)

@@ -1,37 +1,37 @@
 <template>
-  <div>
+  <div v-loading="isLoading">
     <el-card>
-    <el-row id="mark">
-      <el-col :sm="24" :md="12">
-        <span id="userName">{{userInfo.userId}}</span>
-        <span id="views">({{userInfo.views+'浏览'}})</span>
-      </el-col>
-      <el-col :sm="24" :md="12" class="hidden-sm-and-down">
-        <el-checkbox @change="change" v-model="isFocusOn">
-          关注
-        </el-checkbox>
-      </el-col>
-      <el-col id="confirm" :sm="24" :md="12">
-        <el-popconfirm
-          title="确定标记为外挂吗？"
-          @confirm="confirm"
-        >
-          <template #reference>
-            <span>已被{{ userInfo.confirm }}人标记为外挂</span>
-          </template>
-        </el-popconfirm>
-      </el-col>
-      <el-col id="suspicious" :sm="24" :md="12">
-         <el-popconfirm
-          title="确定标记为可疑吗？"
-          @confirm="suspicious"
-        >
-          <template #reference>
-            <span>已被{{userInfo.suspicious}}人标记为可疑</span>
-          </template>
-        </el-popconfirm>
-      </el-col>
-    </el-row>
+      <el-row id="mark">
+        <el-col :sm="24" :md="12">
+          <span id="userName">{{userInfo.userId}}</span>
+          <span id="views">({{userInfo.views+'浏览'}})</span>
+        </el-col>
+        <el-col :sm="24" :md="12" class="hidden-sm-and-down">
+          <el-checkbox @change="change" v-model="isFocusOn">
+            关注
+          </el-checkbox>
+        </el-col>
+        <el-col id="confirm" :sm="24" :md="12">
+          <el-popconfirm
+            title="确定标记为外挂吗？"
+            @confirm="confirm"
+          >
+            <template #reference>
+              <span>已被{{ userInfo.confirm }}人标记为外挂</span>
+            </template>
+          </el-popconfirm>
+        </el-col>
+        <el-col id="suspicious" :sm="24" :md="12">
+           <el-popconfirm
+            title="确定标记为可疑吗？"
+            @confirm="suspicious"
+          >
+            <template #reference>
+              <span>已被{{userInfo.suspicious}}人标记为可疑</span>
+            </template>
+          </el-popconfirm>
+        </el-col>
+      </el-row>
     <div id="LBan">联ban查询结果:{{'未查到举报信息'}} <span @click="dialogVisible = true">提交举报</span></div>
     </el-card>
     <el-dialog
@@ -56,14 +56,20 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
-import { defineProps, ref, getCurrentInstance, toRef, watch, reactive } from 'vue'
+import { defineProps, ref, getCurrentInstance, toRef, watch } from 'vue'
 const { appContext } = getCurrentInstance()
 const that = appContext.config.globalProperties
 const props = defineProps({
   userInfo: {
     type: Object,
-    default: function () {
+    default: function ():Record<string, unknown> {
       return {}
+    }
+  },
+  isLoading: {
+    type: Boolean,
+    default: function ():boolean {
+      return true
     }
   }
 })
@@ -98,43 +104,29 @@ const suspicious = async () => {
 const isFocusOn = ref<boolean | null>(false)
 // 关注的用户列表
 const focusOn = ref<string | null>(window.localStorage.getItem('focusOn'))
-const focusOns = reactive(focusOn.value ? focusOn.value.split(',') : [])
 watch(() => props.userInfo, () => {
-  if (focusOn.value !== null) {
+  const isFocusOns = JSON.parse(focusOn.value)
+  if (Object.prototype.hasOwnProperty.call(isFocusOns, userInfo.value.userId)) {
+    isFocusOn.value = true
+  } else {
     isFocusOn.value = false
-    focusOns.forEach(item => {
-      if (item === userInfo.value.userId) {
-        isFocusOn.value = true
-      }
-    })
   }
 }, { immediate: true })
 //  关注用户
-const change = async (is:boolean) => {
+const change = async (is:boolean):Promise<void> => {
+  let userId:Record<string, unknown>
   if (is) {
     if (focusOn.value === null || focusOn.value === '') {
-      window.localStorage.setItem('focusOn', userInfo.value.userId)
+      userId = {}
     } else {
-      window.localStorage.setItem('focusOn', focusOn.value + ',' + userInfo.value.userId)
+      userId = JSON.parse(focusOn.value)
     }
+    userId[userInfo.value.userId] = userInfo.value.userId
   } else {
-    let a = ''
-    focusOns.forEach((item, index) => {
-      if (item !== userInfo.value.userId && item !== '') {
-        if (index === focusOns.length - 1 || focusOns.length - 1 === 0) {
-          a += item
-        } else {
-          a += item + ','
-        }
-      }
-    })
-    focusOn.value = a
-    if (a === '') {
-      window.localStorage.removeItem('focusOn')
-    } else {
-      window.localStorage.setItem('focusOn', a)
-    }
+    userId = JSON.parse(focusOn.value)
+    delete userId[userInfo.value.userId]
   }
+  window.localStorage.setItem('focusOn', JSON.stringify(userId))
 }
 </script>
 

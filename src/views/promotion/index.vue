@@ -1,8 +1,8 @@
 <template>
   <div class="promotion">
     <el-row :gutter="40">
-      <el-col v-for="(item, index) in 8" :key="index" :md="8" :sm="24">
-        <promotion-card data=""/>
+      <el-col v-for="(item, index) in 9" :key="index" :md="8" :sm="24">
+        <promotion-card :data="{}"/>
       </el-col>
     </el-row>
   </div>

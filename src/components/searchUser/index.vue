@@ -27,12 +27,12 @@
       </el-input>
     </div>
     <!-- 官方相关 -->
-    <div id="official">
+    <!-- <div id="official">
       <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=oAMJUvTPjN5LJDa8Qf5yIgoPXZ3okGqy&authKey=b8xa4GbL1ZCpIzqng%2F81tlIAx7yXq8ikhlAyGB4nCzpcfvGkBnD50Lb3%2FqtxIsYP&noverify=0&group_code=568784361">官方群一</a>
       <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=ppeUhFP8l-0dNytv2oCxxQ3eOFS5Wd_o&authKey=wC9drx80%2FRm5AocIieReXL79UXxdSb9%2FOKHQtT9IVib4v8rw6p1lLsSd8YwSjeBz&noverify=0&group_code=952151528">官方群二</a>
       <a target="_blank" href="https://support.qq.com/products/316786">意见反馈</a>
       <a target="_blank" href="https://afdian.net/order/create?user_id=6f738d8ea67211ebb14052540025c377">为TA发电</a>
-    </div>
+    </div> -->
     <!-- 关注的用户 -->
     <div id="attention" class="hidden-sm-and-down">关注的用户</div>
     <div id="attentionUser" class="hidden-sm-and-down">
@@ -99,6 +99,7 @@ const setProps = { expandTrigger: 'hover' }
 // 搜索的用户id
 const userId = ref<string>('')
 // 跳转到搜索页
+
 const goSearch = () => {
   if (userId.value.trim()) {
     router.push('/searchResults/' + userId.value + '/' + currentOption.value[1])
@@ -107,12 +108,10 @@ const goSearch = () => {
   }
 }
 // 关注的用户列表
-const focusOn = ref(window.localStorage.getItem('focusOn'))
-if (focusOn.value !== null) {
-  focusOn.value = focusOn.value.split(',')
-}
-const goFocusOn = (userId:string) => {
-  router.push('/searchResults/' + userId + '/' + currentOption.value[1])
+const focusOn = ref(JSON.parse(window.localStorage.getItem('focusOn')))
+const goFocusOn = (userIds:string) => {
+  router.push('/searchResults/' + userIds + '/' + currentOption.value[1])
+  userId.value = userIds
 }
 </script>
 

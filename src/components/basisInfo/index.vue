@@ -21,15 +21,19 @@ import { defineProps, toRef, watch, ref } from 'vue'
 const props = defineProps({
   userInfo: {
     type: Object,
-    default: function () {
+    default: function ():Record<string, unknown> {
       return {}
+    }
+  },
+  isLoading: {
+    type: Boolean,
+    default: function ():boolean {
+      return true
     }
   }
 })
 const userInfos = toRef(props, 'userInfo')
-const isLoading = ref(true)
 watch(() => props.userInfo.timePlayed, (newVal:number) => {
-  isLoading.value = true
   if (typeof newVal === 'string' && newVal.indexOf('days') !== -1) {
     const timeArr = newVal.split('days,')
     const time1 = timeArr[0] * 24
@@ -38,7 +42,6 @@ watch(() => props.userInfo.timePlayed, (newVal:number) => {
   } else if (typeof newVal === 'string') {
     userInfos.value.timePlayed = newVal.split(':')[0]
   }
-  isLoading.value = false
 })
 const sort = [
   { key: 'timePlayed', name: '游戏时间' },
