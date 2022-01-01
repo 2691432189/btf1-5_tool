@@ -1,7 +1,7 @@
 <template>
     <!-- 工具名 -->
-    <div id="name">
-      战地1/5 战绩查询工具
+    <div id="name" @click="toFrontPage">
+      BTF战绩助手
     </div>
     <!-- 搜索栏 -->
     <div id="searchInput">
@@ -113,6 +113,10 @@ const goFocusOn = (userIds:string) => {
   router.push('/searchResults/' + userIds + '/' + currentOption.value[1])
   userId.value = userIds
 }
+
+const toFrontPage = () => {
+  router.push('/')
+}
 </script>
 
 <style sass>
@@ -121,6 +125,7 @@ const goFocusOn = (userIds:string) => {
     font-size: 20px;
     text-align: center;
     margin: 20px 0 0 0;
+    cursor: pointer;
   }
   /* 搜索组件栏 */
   #searchInput {

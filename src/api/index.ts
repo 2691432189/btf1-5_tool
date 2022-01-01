@@ -1,7 +1,8 @@
 import axios from 'axios'
-axios.defaults.baseURL = 'http://47.97.106.32:7777'
+axios.defaults.baseURL = 'https://btfapi.hellokfq.top'
 // http://47.97.106.32:7777
 // http://localhost:8081
+// https://btfapi.hellokfq.top
 
 export default {
   // 获取用户信息
@@ -27,5 +28,9 @@ export default {
   // 获取用户兵种统计信息
   getUserArms (type:string, userId:string):any {
     return axios.get(`/user/getUserArms?userId=${userId}&type=${type}`)
+  },
+  // 获取用户战排信息
+  getUserBattlePlatoon (type:string, userId:string):any {
+    return axios.get(`/user/getUserBattlePlatoon?userId=${userId}&type=${type}`)
   }
 }
