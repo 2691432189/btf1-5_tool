@@ -5,6 +5,7 @@ import installElementPlus from './plugins/element-plus'
 import './assets/css/global.css'
 import 'element-plus/lib/theme-chalk/display.css'
 import axios from './api/index'
+import store from './store/index'
 
 const app = createApp(App)
 
@@ -12,4 +13,4 @@ const app = createApp(App)
 app.config.globalProperties.$http = axios
 
 installElementPlus(app)
-app.use(router).mount('#app')
+app.use(router).use(store).mount('#app')
